@@ -115,6 +115,58 @@
         chdir: "{{ base_path }}"
         cmd: "{{ django_admin }} collectstatic --noinput"
 
+    - name: Gunicorn
+      become: true
+      block:
+        - name: Gunicorn - Install 
+          pip:
+            name: gunicorn
+            virtualenv: "{{ venv_path }}"
+            state: present
+
+        - name: Gunicorn - socket file 
+          template:
+            src: templates/gunicorn.socket.j2
+            dest: /etc/systemd/system/gunicorn.socket
+
+        - name: Gunicorn - service file
+          template:
+            src: templates/gunicorn.service.j2
+            dest: /etc/systemd/system/gunicorn.service
+            
+        - name: Gunicorn - Reload systemd
+          systemd:
+            daemon_reload: yes
+      
+        - name: Gunicorn - Start service
+          systemd:
+            state: started
+            enabled: true
+            name: gunicorn.socket
+
+    - name: NGINX
+      become: true
+      block:
+        - name: NGINX - Copy site config
+          template:
+            src: templates/nginx_blog.j2
+            dest: "/etc/nginx/sites-available/nginx_blog"
+
+        - name: NGINX - Enable site config
+          file:
+            src: "/etc/nginx/sites-available/nginx_blog"
+            dest: /etc/nginx/sites-enabled/default
+            state: link
+
+        - name: NGINX - Reload service
+          systemd:
+            state: restarted
+            name: nginx
+
+
+
+
+
 
 
 
