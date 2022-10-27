@@ -1,0 +1,13 @@
+---
+- hosts: webservers
+  remote_user: root
+  vars:
+    - msg: Hello
+  tasks:
+    - name: Print Hello
+      debug:
+        msg: "{{ msg }} World"
+    - name: Ping
+      ping:
+
+

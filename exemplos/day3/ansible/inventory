@@ -1,0 +1,2 @@
+[webservers]
+167.99.211.160  ansible_ssh_private_key_file=~/.ssh/teste

@@ -1,0 +1,17 @@
+---
+- hosts: webservers
+  remote_user: root
+  vars:
+    system_user: root
+    base_path: /app
+    repo_url: 'https://github.com/rochacbruno/python-web-api'
+    repo_branch: day3
+    repo_path: "{{ base_path }}/python-web-api"
+    app_path: "{{ repo_path }}/exemplos/day2/django"
+    app_name: djblog
+    settings_path: "{{ app_name }}.settings"
+    database_path: "{{ base_path }}/db.sqlite3"
+    venv_path: /home/{{ system_user }}/.venv
+    django_admin: "{{ venv_path }}/bin/django-admin"
+
+
